@@ -25,7 +25,7 @@ end
 
 -- Print error message
 local function print_error(message)
-	print("Error: " .. message)
+	vim.notify(message, vim.log.levels.ERROR, { title = "nvim-macros" })
 end
 
 -- Get default register ("unnamed" or "unnamedplus")
@@ -80,18 +80,21 @@ local function handle_json_file(mode, data)
 	if mode == "r" then
 		local file = io.open(file_path, "r")
 		if not file then
-			print("Failed to read file, initializing new file: " .. file_path)
+			print_error("Failed to read file")
+			print("Initializing new file: " .. file_path)
 			return handle_json_file("w", { macros = {} })
 		end
 		local content = file:read("*a")
 		file:close()
 		if not content or content == "" then
-			print("File is empty, initializing with default structure.")
+			print_error("File is empty")
+			print("Initializing with default structure.")
 			return handle_json_file("w", { macros = {} })
 		else
 			local decoded_content = vim.fn.json_decode(content)
 			if not decoded_content then
-				print("Invalid JSON content, initializing with default structure.")
+				print_error("Invalid JSON content")
+				print("Initializing with default structure.")
 				return handle_json_file("w", { macros = {} })
 			end
 			return decoded_content
