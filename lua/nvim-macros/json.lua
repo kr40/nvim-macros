@@ -1,4 +1,4 @@
-local config = require("nvim-macros.init").config
+local config = require("nvim-macros.init")
 local util = require("nvim-macros.util")
 
 local M = {}
