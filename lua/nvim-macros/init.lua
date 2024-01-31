@@ -213,13 +213,7 @@ function M.select_and_yank_macro()
 				return
 			end
 			set_decoded_macro_to_register(encoded_content, target_register)
-			print(
-				"Yanked Raw Macro (@register) "
-					.. choice:match("^[^|]+")
-					.. " into register `"
-					.. target_register
-					.. "`"
-			)
+			print("Yanked Raw Macro " .. choice:match("^[^|]+") .. " into register `" .. target_register .. "`")
 		else
 			print_error("Invalid yank option selected.")
 		end
