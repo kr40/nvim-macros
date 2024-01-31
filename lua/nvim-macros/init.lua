@@ -60,7 +60,7 @@ end
 -- Set macro to register (Escaped termcodes)
 local function set_macro_to_register(macro_content)
 	if not macro_content then
-		print_error("Macro content is nil. Cannot set to register.")
+		print_error("Macro content is empty. Cannot set to register.")
 		return
 	end
 
@@ -120,7 +120,7 @@ function M.yank(register)
 	register = register or vim.fn.input("Please specify a register to yank from: ")
 	local register_content = vim.fn.getreg(register)
 	if not register_content or register_content == "" then
-		print_error("Invalid or empty register content!")
+		print_error("Register is empty or has invalid content!")
 		return
 	end
 
@@ -132,7 +132,7 @@ end
 -- Run macros from inside a function (For keymaps)
 function M.run(macro)
 	if not macro then
-		print_error("Macro is nil. Cannot run.")
+		print_error("Macro is Empty. Cannot run.")
 		return
 	end
 	vim.cmd.normal(vim.api.nvim_replace_termcodes(macro, true, true, true))
@@ -208,7 +208,7 @@ function M.select_and_yank_macro()
 
 		if yank_option == "1" then
 			set_macro_to_register(macro_content)
-			print("Yanked to Clipboard (p to paste) " .. choice:match("^[^|]+"))
+			print("Yanked to Clipboard (p to paste): " .. choice:match("^[^|]+"))
 		elseif yank_option == "2" then
 			local target_register = vim.fn.input("Please specify a register to set the macro to: ")
 			if not target_register or target_register == "" then
@@ -216,7 +216,7 @@ function M.select_and_yank_macro()
 				return
 			end
 			set_decoded_macro_to_register(encoded_content, target_register)
-			print("Yanked Raw Macro " .. choice:match("^[^|]+") .. " into register `" .. target_register .. "`")
+			print("Yanked Raw Macro: " .. choice:match("^[^|]+") .. " into register `" .. target_register .. "`")
 		else
 			print_error("Invalid yank option selected.")
 		end
