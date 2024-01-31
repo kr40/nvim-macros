@@ -2,17 +2,19 @@ local base64 = require("nvim-macros.base64")
 local util = require("nvim-macros.util")
 local json = require("nvim-macros.json")
 
-local M = {}
-
-M.config = {
+-- Default configuration
+local config = {
 	json_file_path = vim.fs.normalize(vim.fn.stdpath("config") .. "/macros.json"),
 }
--- Set user configuration
+
+local M = {}
+
+-- Setup function
 function M.setup(user_config)
 	if user_config ~= nil then
 		for key, value in pairs(user_config) do
-			if M.config[key] ~= nil then
-				M.config[key] = value
+			if config[key] ~= nil then
+				config[key] = value
 			else
 				print("Invalid configuration key: " .. key)
 			end
@@ -60,19 +62,20 @@ M.save_macro = function(register)
 		return
 	end
 
-	local macros = json.handle_json_file("r")
+	local macros = json.handle_json_file(config.json_file_path, "r")
 	if not macros then
 		util.print_error("Failed to read macros from JSON. Creating a new file.")
 		macros = { macros = {} }
 	end
 
 	table.insert(macros.macros, { name = name, content = macro, raw = macro_raw })
-	json.handle_json_file("w", macros)
+	json.handle_json_file(config.json_file_path, "w", macros)
 	print("Macro saved as " .. name)
 end
 
+-- Delete macro from JSON file
 M.delete_macro = function()
-	local macros = json.handle_json_file("r")
+	local macros = json.handle_json_file(config.json_file_path, "r")
 	if not macros or not macros.macros or #macros.macros == 0 then
 		util.print_error("No macros found.")
 		return
@@ -105,16 +108,15 @@ M.delete_macro = function()
 			return
 		end
 
-		-- Remove the selected macro from the list
 		table.remove(macros.macros, macro_index)
-		json.handle_json_file("w", macros) -- Write the updated list back to the JSON file
+		json.handle_json_file(config.json_file_path, "w", macros)
 		print("Macro deleted: " .. choice:match("^[^|]+"))
 	end)
 end
 
 -- Select and yank macro from JSON file (Yanks raw or escaped termcodes)
 M.select_and_yank_macro = function()
-	local macros = json.handle_json_file("r")
+	local macros = json.handle_json_file(config.json_file_path, "r")
 	if not macros or not macros.macros or #macros.macros == 0 then
 		util.print_error("No macros found.")
 		return
