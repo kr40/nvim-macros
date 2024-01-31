@@ -1,15 +1,14 @@
-local config = require("nvim-macros.init").config
 local util = require("nvim-macros.util")
 
 local M = {}
 
-M.handle_json_file = function(mode, data)
-	if not config.json_file_path or config.json_file_path == "" then
+M.handle_json_file = function(json_file_path, mode, data)
+	if not json_file_path or json_file_path == "" then
 		util.print_error("JSON file path is invalid.")
 		return mode == "r" and { macros = {} } or nil
 	end
 
-	local file_path = config.json_file_path
+	local file_path = json_file_path
 	if mode == "r" then
 		local file = io.open(file_path, "r")
 		if not file then
