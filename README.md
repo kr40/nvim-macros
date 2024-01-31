@@ -60,7 +60,7 @@ Got ideas? Found a bug? Jump in and contribute! Whether it's a pull request or a
 
 ## To-Do 📝
 
--[] Add the ability to edit macros: We're conjuring up a way for you to tweak and fine-tune your macros right within nvim-macros, making it easier than ever to perfect your magical sequences.
+- [ ] Add the ability to edit macros: We're conjuring up a way for you to tweak and fine-tune your macros right within nvim-macros, making it easier than ever to perfect your magical sequences.
 
 Feel free to jump in and contribute if you're drawn to any of these upcoming features or if you have your own ideas to sprinkle some extra magic into nvim-macros! 🌟
 
