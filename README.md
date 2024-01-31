@@ -17,7 +17,7 @@ Time to get nvim-macros into your Neovim setup! If you're rolling with [lazy.nvi
 ```lua
 {
   "kr40/nvim-macros",
-  cmd = {"MacroSave", "MacroYank", "MacroSelect"},
+  cmd = {"MacroSave", "MacroYank", "MacroSelect", "MacroDelete"},
   opts = {
     json_file_path = vim.fs.normalize(vim.fn.stdpath("config") .. "/macros.json"), -- Optional
   }
