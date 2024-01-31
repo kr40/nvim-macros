@@ -61,7 +61,15 @@ Got ideas? Found a bug? Jump in and contribute! Whether it's a pull request or a
 
 ## To-Do 📝
 
-- [ ] Add the ability to edit macros: We're conjuring up a way for you to tweak and fine-tune your macros right within nvim-macros, making it easier than ever to perfect your magical sequences.
+nvim-macros is on a quest to make your Neovim experience even more magical! Here are some enchantments we're looking to add:
+
+- [ ] **Macro Editing**: Forge a way to edit your macros directly within Neovim. This will involve summoning a macro from the JSON grimoire into a buffer, weaving your edits, and then sealing the updated macro back into the tome.
+
+- [ ] **Macro Tags/Categories**: Introduce the mystic arts of tagging and categorizing your macros. This will allow you to filter and search through your macros based on their assigned tags or categories, managing your macro arsenal with unparalleled ease.
+
+- [ ] **Macro Sharing/Importing**: Develop an incantation to export and import macros, empowering you to share your macros with fellow sorcerers or swiftly set up your macro sanctum on a new system.
+
+- [ ] **Macro Analytics**: Offer a crystal ball to gaze into your macro usage, revealing insights such as the frequency of use, helping you to understand your workflow and refine your arsenal of macros.
 
 Feel free to jump in and contribute if you're drawn to any of these upcoming features or if you have your own ideas to sprinkle some extra magic into nvim-macros! 🌟
 
