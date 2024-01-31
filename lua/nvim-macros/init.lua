@@ -166,6 +166,47 @@ function M.save_macro(register)
 	print("Macro saved as " .. name)
 end
 
+function M.delete_macro()
+	local macros = handle_json_file("r")
+	if not macros or not macros.macros or #macros.macros == 0 then
+		print_error("No macros found.")
+		return
+	end
+
+	local choices = {}
+	local name_to_index_map = {}
+	for index, macro in ipairs(macros.macros) do
+		if macro.name then
+			local display_text = macro.name .. " | " .. string.sub(macro.content, 1, 150)
+			table.insert(choices, display_text)
+			name_to_index_map[display_text] = index
+		end
+	end
+
+	if next(choices) == nil then
+		print_error("No valid macros to select for deletion.")
+		return
+	end
+
+	vim.ui.select(choices, { prompt = "Select a macro to delete:" }, function(choice)
+		if not choice then
+			print_error("No macro selected for deletion.")
+			return
+		end
+
+		local macro_index = name_to_index_map[choice]
+		if not macro_index then
+			print_error("Selected macro is not valid.")
+			return
+		end
+
+		-- Remove the selected macro from the list
+		table.remove(macros.macros, macro_index)
+		handle_json_file("w", macros) -- Write the updated list back to the JSON file
+		print("Macro deleted: " .. choice:match("^[^|]+"))
+	end)
+end
+
 -- Select and yank macro from JSON file (Yanks raw or escaped termcodes)
 function M.select_and_yank_macro()
 	local macros = handle_json_file("r")
