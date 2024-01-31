@@ -34,7 +34,7 @@ Once you've got nvim-macros installed, Neovim is your macro playground! 🎉
 
 ### Example 🌟
 
-Imagine you've got a nifty macro recorded in the q register that magically turns the current line into a to-do list item. After recording it, just summon **:MacroYank q** to yank the macro. Then, you can elegantly bind it to a key sequence in your Neovim setup like this:
+Imagine you've got a nifty macro recorded in the **q** register that magically turns the current line into a to-do list item. After recording it, just summon **:MacroYank q** to yank the macro. Then, you can elegantly bind it to a key sequence in your Neovim setup like this:
 
 ```lua
 vim.keymap.set('n', '<Leader>t', '^i-<Space>[<Space>]<Space><Esc>', { remap = true })
