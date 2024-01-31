@@ -201,11 +201,11 @@ function M.select_and_yank_macro()
 			return
 		end
 
-		local yank_option = vim.fn.input("Yank as (1) Escaped Termcodes, (2) Raw Decoded Content: ")
+		local yank_option = vim.fn.input("Yank as (1) Escaped (Yank to Clipboard), (2) Raw Macro: ")
 
 		if yank_option == "1" then
 			set_macro_to_register(macro_content)
-			print("Yanked (with escaped termcodes) " .. choice:match("^[^|]+"))
+			print("Yanked to Clipboard (p to paste) " .. choice:match("^[^|]+"))
 		elseif yank_option == "2" then
 			local target_register = vim.fn.input("Please specify a register to set the macro to: ")
 			if not target_register or target_register == "" then
@@ -214,7 +214,7 @@ function M.select_and_yank_macro()
 			end
 			set_decoded_macro_to_register(encoded_content, target_register)
 			print(
-				"Yanked (raw decoded content) "
+				"Yanked Raw Macro (@register) "
 					.. choice:match("^[^|]+")
 					.. " into register `"
 					.. target_register
