@@ -31,6 +31,7 @@ Once you've got nvim-macros installed, Neovim is your macro playground! 🎉
 - **:MacroYank [register]**: Yanks a macro from a register. If you don't specify, it'll politely ask you to choose one.
 - **:MacroSave [register]**: Saves a macro into the book of legends (aka your JSON file). It'll prompt for a register if you're feeling indecisive.
 - **:MacroSelect**: Brings up your macro menu. Pick one, and it'll be ready for action.
+- **:MacroDelete**: Summon a list of your macros, then select one to permanently vanish it from your collection, as if it never existed.
 
 ### Example 🌟
 
