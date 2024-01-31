@@ -4,7 +4,7 @@ local config = {
 }
 
 -- Load base64 module
-local base64 = require("macroni.base64")
+local base64 = require("nvim-macros.base64")
 
 local M = {}
 
