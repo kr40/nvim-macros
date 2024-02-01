@@ -7,6 +7,16 @@ M.print_error = function(message)
 	vim.notify(message, vim.log.levels.ERROR, { title = "nvim-macros" })
 end
 
+-- Print info message
+M.print_info = function(message)
+	vim.notify(message, vim.log.levels.WARN, { title = "nvim-macros" })
+end
+
+-- Print message
+M.print_message = function(message)
+	vim.notify(message, vim.log.levels.INFO, { title = "nvim-macros" })
+end
+
 -- Get default register ("unnamed" or "unnamedplus")
 M.get_default_register = function()
 	local clipboardFlags = vim.split(vim.api.nvim_get_option("clipboard"), ",")
@@ -22,24 +32,23 @@ end
 -- Decode and set macro to register
 M.set_decoded_macro_to_register = function(encoded_content, target_register)
 	if not encoded_content or encoded_content == "" then
-		M.print_error("Encoded macro content is empty. Cannot set to register.")
+		M.print_error("Empty encoded content. Cannot set register `" .. target_register .. "`.")
 		return
 	end
 
 	local decoded_content = base64.dec(encoded_content)
 	if not decoded_content or decoded_content == "" then
-		M.print_error("Decoding failed or decoded content is empty.")
+		M.print_error("Failed to decode. Register `" .. target_register .. "` remains unchanged.")
 		return
 	end
 
 	vim.fn.setreg(target_register, decoded_content)
-	print("Decoded macro set to register `" .. target_register .. "`")
 end
 
 -- Set macro to register (Escaped termcodes)
 M.set_macro_to_register = function(macro_content)
 	if not macro_content then
-		M.print_error("Macro content is empty. Cannot set to register.")
+		M.print_error("Empty macro content. Cannot set to default register.")
 		return
 	end
 
