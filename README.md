@@ -20,6 +20,7 @@ Time to get nvim-macros into your Neovim setup! If you're rolling with [lazy.nvi
   cmd = {"MacroSave", "MacroYank", "MacroSelect", "MacroDelete"},
   opts = {
     json_file_path = vim.fs.normalize(vim.fn.stdpath("config") .. "/macros.json"), -- Optional
+    default_macro_register = "q", -- Use as default register for :MacroYank and :MacroSave and :MacroSelect Raw functions
   }
 }
 ```
