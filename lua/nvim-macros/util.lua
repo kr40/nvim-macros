@@ -29,6 +29,26 @@ M.get_default_register = function()
 	return '"'
 end
 
+-- Get register input
+M.get_register_input = function(prompt, default_register)
+	local valid_registers = "[a-z0-9]"
+	local register = vim.fn.input(prompt)
+
+	while not (register:match("^" .. valid_registers .. "$") or register == "") do
+		M.print_error(
+			"Invalid register: `" .. register .. "`. Register must be a single lowercase letter or number 1-9."
+		)
+		register = vim.fn.input(prompt)
+	end
+
+	if register == "" then
+		register = default_register
+		M.print_info("No register specified. Using default `" .. default_register .. "`.")
+	end
+
+	return register
+end
+
 -- Decode and set macro to register
 M.set_decoded_macro_to_register = function(encoded_content, target_register)
 	if not encoded_content or encoded_content == "" then
