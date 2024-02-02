@@ -9,6 +9,8 @@ nvim-macros is your go-to Neovim plugin for supercharging your macro game! 🚀 
 - **Select & Yank** 📋: Pick a macro from your saved collection and yank it into a register, ready for its moment in the spotlight.
 - **Smart Encoding/Decoding** 🤓: nvim-macros speaks Base64 fluently, so it effortlessly handles macros with special characters.
 - **Your Storage, Your Rules** 🗂️: Point nvim-macros to your chosen JSON file for macro storage. It's your macro library, after all!
+- **Pretty Printing** 🎨: Choose your JSON formatter ([jq](https://jqlang.github.io/jq/) or [yq](https://github.com/mikefarah/yq)) to keep your JSON file looking sharp. No more squinting at a jumbled mess of macros!
+- **Backup & Restore** 📦: Made a mess editing the JSON file? No worries! nvim-macros keeps a backup of your JSON file, so you can always restore your macros to their former glory auto-magically!
 
 ## Getting Started 🚀
 
@@ -19,8 +21,11 @@ Time to get nvim-macros into your Neovim setup! If you're rolling with [lazy.nvi
   "kr40/nvim-macros",
   cmd = {"MacroSave", "MacroYank", "MacroSelect", "MacroDelete"},
   opts = {
-    json_file_path = vim.fs.normalize(vim.fn.stdpath("config") .. "/macros.json"), -- Optional
+  
+    json_file_path = vim.fs.normalize(vim.fn.stdpath("config") .. "/macros.json"), -- Location where the macros will be stored
     default_macro_register = "q", -- Use as default register for :MacroYank and :MacroSave and :MacroSelect Raw functions
+    json_formatter = "none", -- can be "none" | "jq" | "yq" used to pretty print the json file (jq or yq must be installed!)
+    
   }
 }
 ```
@@ -46,15 +51,17 @@ vim.keymap.set('n', '<Leader>t', '^i-<Space>[<Space>]<Space><Esc>', { remap = tr
 
 ## Making It Yours 🎨
 
-nvim-macros loves to fit in just right. Set up your JSON file path like so:
+nvim-macros loves to fit in just right. Set up your custom options like so:
 
 ```lua
 require('nvim-macros').setup({
-    json_file_path = '/your/very/own/path/to/macros.json'
+    json_file_path = "/your/very/own/path/to/macros.json",
+    default_macro_register = "a",
+    json_formatter = "jq",
 })
 ```
 
-No config? No worries! nvim-macros will go with the flow and use a default path.
+Fine with the defaults? No worries! nvim-macros will go with the flow and use the [defaults](#getting-started-🚀) no need to call `setup` or `opts`.
 
 ## Join the Party 🎉
 
