@@ -2,6 +2,7 @@ local util = require("nvim-macros.util")
 
 local M = {}
 
+-- Validate JSON content
 local validate_json = function(decoded_content)
 	if
 		not decoded_content
@@ -29,6 +30,7 @@ local validate_json = function(decoded_content)
 	return true
 end
 
+-- Pretty print JSON content using jq or yq
 local pretty_print_json = function(data, formatter)
 	local json_str = vim.fn.json_encode(data)
 
@@ -53,6 +55,7 @@ local pretty_print_json = function(data, formatter)
 	end
 end
 
+-- Get the most recent backup file
 local get_latest_backup = function(backup_dir)
 	local p = io.popen('ls -t "' .. backup_dir .. '"')
 	if p then
@@ -64,6 +67,7 @@ local get_latest_backup = function(backup_dir)
 	end
 end
 
+-- Restore from the most recent backup
 local restore_from_backup = function(backup_file, original_file)
 	if not backup_file or not original_file then
 		return false
@@ -91,6 +95,7 @@ local cleanup_old_backups = function(backup_dir, keep_last_n)
 	end
 end
 
+-- Handle JSON file read and write (r, w)
 M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 	if not json_file_path or json_file_path == "" then
 		util.print_error("Invalid JSON file path.")
