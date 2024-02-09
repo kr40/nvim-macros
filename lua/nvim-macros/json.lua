@@ -36,14 +36,14 @@ local pretty_print_json = function(data, formatter)
 
 	if formatter == "jq" then
 		if vim.fn.executable("jq") == 0 then
-			util.print_error("jq is not installed. Falling back to default 'none'.")
+			util.notify("jq is not installed. Falling back to default 'none'.", "error")
 			return json_str
 		end
 		local cmd = "echo " .. vim.fn.shellescape(json_str) .. " | jq --monochrome-output ."
 		return vim.fn.system(cmd)
 	elseif formatter == "yq" then
 		if vim.fn.executable("yq") == 0 then
-			util.print_error("yq is not installed. Falling back to default 'none'.")
+			util.notify("yq is not installed. Falling back to default 'none'.", "error")
 			return json_str
 		end
 		local cmd = "echo "
@@ -98,7 +98,7 @@ end
 -- Handle JSON file read and write (r, w)
 M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 	if not json_file_path or json_file_path == "" then
-		util.print_error("Invalid JSON file path.")
+		util.notify("Invalid JSON file path.", "error")
 		return mode == "r" and { macros = {} } or nil
 	end
 
@@ -112,11 +112,11 @@ M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 			local latest_backup = get_latest_backup(backup_dir)
 			if latest_backup then
 				if restore_from_backup(latest_backup, file_path) then
-					util.print_info("No JSON found. Restored from the most recent backup.")
+					util.notify("No JSON found. Restored from the most recent backup.")
 					file = io.open(file_path, "r")
 				end
 			else
-				util.print_info("No JSON found. Creating new file: " .. file_path)
+				util.notify("No JSON found. Creating new file: " .. file_path)
 				file = io.open(file_path, "w")
 				if file then
 					local content = vim.fn.json_encode({ macros = {} })
@@ -124,7 +124,7 @@ M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 					file:close()
 					return { macros = {} }
 				else
-					util.print_error("Failed to create new file: " .. file_path)
+					util.notify("Failed to create new file: " .. file_path, "error")
 					return nil
 				end
 			end
@@ -138,11 +138,11 @@ M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 				local latest_backup = get_latest_backup(backup_dir)
 				if latest_backup then
 					if restore_from_backup(latest_backup, file_path) then
-						util.print_info("File is empty. Restored from most recent backup.")
+						util.notify("File is empty. Restored from most recent backup.", "error")
 						return M.handle_json_file(json_formatter, json_file_path, mode, data)
 					end
 				else
-					util.print_info("File is empty. Initializing with default structure.")
+					util.notify("File is empty. Initializing with default structure.", "error")
 					return { macros = {} }
 				end
 			end
@@ -152,23 +152,22 @@ M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 				if status and validate_json(decoded_content) then
 					return decoded_content
 				else
-					util.print_error("Invalid JSON content. Attempting to restore from backup.")
+					util.notify("Invalid JSON content. Attempting to restore from backup.", "error")
 					local latest_backup = get_latest_backup(backup_dir)
 					if latest_backup and restore_from_backup(latest_backup, file_path) then
-						util.print_info("Successfully restored from backup.")
+						util.notify("Successfully restored from backup.")
 						return M.handle_json_file(json_formatter, json_file_path, mode, data)
 					else
-						util.print_error("Failed to restore from backup. Manual check required.")
+						util.notify("Failed to restore from backup. Manual check required.", "error")
 						return nil
 					end
 				end
 			end
 		end
 	elseif mode == "w" then
-		local temp_file_path = file_path .. ".tmp"
 		local backup_file_path = backup_dir .. "/" .. os.date("%Y%m%d%H%M%S") .. "_macros.json.bak"
 
-		local file = io.open(temp_file_path, "w")
+		local file = io.open(file_path, "w")
 		if not file then
 			util.print_error("Unable to write to the file.")
 			return nil
@@ -176,21 +175,12 @@ M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 
 		local content = (json_formatter == "jq" or json_formatter == "yq") and pretty_print_json(data, json_formatter)
 			or vim.fn.json_encode(data)
+
 		file:write(content)
 		file:close()
 
-		if not os.rename(file_path, backup_file_path) or not os.rename(temp_file_path, file_path) then
-			util.print_error("Failed to update the macros file. Attempting to restore from the most recent backup.")
-			local latest_backup = get_latest_backup(backup_dir)
-			if latest_backup and restore_from_backup(latest_backup, file_path) then
-				util.print_info("Successfully restored from backup.")
-			else
-				util.print_error("Failed to restore from backup. Manual check required.")
-			end
-		else
-			os.execute("cp -f '" .. file_path .. "' '" .. backup_file_path .. "'")
-			cleanup_old_backups(backup_dir, 3)
-		end
+		os.execute("cp -f '" .. file_path .. "' '" .. backup_file_path .. "'")
+		cleanup_old_backups(backup_dir, 3)
 	else
 		util.print_error("Invalid mode: '" .. mode .. "'. Use 'r' or 'w'.")
 	end
