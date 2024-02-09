@@ -5,7 +5,7 @@ nvim-macros is your go-to Neovim plugin for supercharging your macro game! 🚀 
 ## Why You'll Love nvim-macros 😍
 
 - **Yank Macros** 🎣: Grab macros from any register and set them up for action in your default register with just a command.
-- **Save Macros** 💾: Stash your precious macros in a JSON file. Choose to save with all the fancy termcodes or keep it raw - your call!
+- **Save Macros** 💾: Stash your precious macros in a JSON file. Save them with all the fancy termcodes and the raw version - ready when you need them!
 - **Select & Yank** 📋: Pick a macro from your saved collection and yank it into a register, ready for its moment in the spotlight.
 - **Smart Encoding/Decoding** 🤓: nvim-macros speaks Base64 fluently, so it effortlessly handles macros with special characters.
 - **Your Storage, Your Rules** 🗂️: Point nvim-macros to your chosen JSON file for macro storage. It's your macro library, after all!
