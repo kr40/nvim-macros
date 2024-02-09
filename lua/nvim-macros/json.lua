@@ -165,34 +165,24 @@ M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 			end
 		end
 	elseif mode == "w" then
-		local temp_file_path = file_path .. ".tmp"
 		local backup_file_path = backup_dir .. "/" .. os.date("%Y%m%d%H%M%S") .. "_macros.json.bak"
 
-		local file = io.open(temp_file_path, "w")
+		local file = io.open(file_path, "w")
 		if not file then
-			util.notify("Unable to write to the file.", "error")
+			util.print_error("Unable to write to the file.")
 			return nil
 		end
 
 		local content = (json_formatter == "jq" or json_formatter == "yq") and pretty_print_json(data, json_formatter)
 			or vim.fn.json_encode(data)
+
 		file:write(content)
 		file:close()
 
-		if not os.rename(file_path, backup_file_path) or not os.rename(temp_file_path, file_path) then
-			util.notify("Failed to update the macros file. Attempting to restore from the most recent backup.", "error")
-			local latest_backup = get_latest_backup(backup_dir)
-			if latest_backup and restore_from_backup(latest_backup, file_path) then
-				util.notify("Successfully restored from backup.")
-			else
-				util.notify("Failed to restore from backup. Manual check required.", "error")
-			end
-		else
-			os.execute("cp -f '" .. file_path .. "' '" .. backup_file_path .. "'")
-			cleanup_old_backups(backup_dir, 3)
-		end
+		os.execute("cp -f '" .. file_path .. "' '" .. backup_file_path .. "'")
+		cleanup_old_backups(backup_dir, 3)
 	else
-		util.notify("Invalid mode: '" .. mode .. "'. Use 'r' or 'w'.", "error")
+		util.print_error("Invalid mode: '" .. mode .. "'. Use 'r' or 'w'.")
 	end
 end
 
