@@ -169,7 +169,7 @@ M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 
 		local file = io.open(file_path, "w")
 		if not file then
-			util.print_error("Unable to write to the file.")
+			util.notify("Unable to write to the file.", "error")
 			return nil
 		end
 
@@ -182,7 +182,7 @@ M.handle_json_file = function(json_formatter, json_file_path, mode, data)
 		os.execute("cp -f '" .. file_path .. "' '" .. backup_file_path .. "'")
 		cleanup_old_backups(backup_dir, 3)
 	else
-		util.print_error("Invalid mode: '" .. mode .. "'. Use 'r' or 'w'.")
+		util.notify("Invalid mode: '" .. mode .. "'. Use 'r' or 'w'.", "error")
 	end
 end
 
